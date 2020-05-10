@@ -1,5 +1,8 @@
 package io.bruce.ultron.manage.web;
 
+import lombok.Data;
+
+@Data
 public class BaseResponse<T> {
 
     private int code;

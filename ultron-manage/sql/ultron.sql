@@ -16,6 +16,7 @@ CREATE TABLE if not exists t_jobs  (
   slot_num int NOT NULL COMMENT '槽点数',
   task_manager_mem int NOT NULL COMMENT 'task manager 内存',
   node_num int not null comment 'yarn container 的数量',
+  yarn_application_id varchar(300) comment 'yarn 任务id',
   PRIMARY KEY (id)
 ) COMMENT = '任务表';
 
