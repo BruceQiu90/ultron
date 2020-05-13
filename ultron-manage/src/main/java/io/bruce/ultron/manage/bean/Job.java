@@ -2,10 +2,11 @@ package io.bruce.ultron.manage.bean;
 
 import lombok.Data;
 
+import javax.persistence.Table;
+
 @Data
-public class JobInfo {
-    private Long id;
-    private Long pid;
+@Table(name = "t_jobs")
+public class Job extends BaseEntity<Long> {
     private String jobName;
     private String mainClass;
     private String jarPath;
