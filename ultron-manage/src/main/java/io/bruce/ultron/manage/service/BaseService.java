@@ -2,16 +2,18 @@ package io.bruce.ultron.manage.service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import io.bruce.ultron.manage.bean.BaseEntity;
 import io.bruce.ultron.manage.mapper.BaseMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 @Service
-public abstract class BaseService<T, PK extends Serializable> {
+public abstract class BaseService<T extends BaseEntity<PK>, PK extends Serializable> {
 
     @Autowired
     private BaseMapper<T> baseMapper;
@@ -22,11 +24,15 @@ public abstract class BaseService<T, PK extends Serializable> {
 
     @Transactional
     public void save(T entity) {
+        Date date = new Date();
+        entity.setCreateTime(date);
+        entity.setUpdateTime(date);
         baseMapper.insertSelective(entity);
     }
 
     @Transactional
     public void updateById(T entity) {
+        entity.setUpdateTime(new Date());
         baseMapper.updateByPrimaryKeySelective(entity);
     }
 

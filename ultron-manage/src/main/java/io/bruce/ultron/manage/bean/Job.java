@@ -8,6 +8,7 @@ import javax.persistence.Table;
 @Table(name = "t_jobs")
 public class Job extends BaseEntity<Long> {
     private String jobName;
+    private Long pid;
     private String mainClass;
     private String jarPath;
     private String description;

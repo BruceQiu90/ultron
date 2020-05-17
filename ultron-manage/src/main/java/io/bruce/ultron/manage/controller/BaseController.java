@@ -1,5 +1,6 @@
 package io.bruce.ultron.manage.controller;
 
+import com.github.pagehelper.PageInfo;
 import io.bruce.ultron.manage.bean.BaseEntity;
 import io.bruce.ultron.manage.service.BaseService;
 import io.bruce.ultron.manage.web.BaseResponse;
@@ -14,12 +15,12 @@ import java.io.Serializable;
 public abstract class BaseController<T extends BaseEntity<PK>, PK extends Serializable> {
 
     @Autowired
-    protected BaseService<T, PK> abstractService;
+    protected BaseService<T, PK> baseService;
 
     @GetMapping("{id}")
     public BaseResponse<T> getById(@PathVariable("id") PK id) {
         try {
-            T entity = abstractService.getById(id);
+            T entity = baseService.getById(id);
             return BaseResponse.success(entity);
         } catch (Exception e) {
             log.error("getById error", e);
@@ -30,7 +31,7 @@ public abstract class BaseController<T extends BaseEntity<PK>, PK extends Serial
     @PostMapping
     public BaseResponse save(@RequestBody T entity) {
         try {
-            abstractService.save(entity);
+            baseService.save(entity);
             return BaseResponse.success();
         } catch (Exception e) {
             log.error("save one error", e);
@@ -42,7 +43,7 @@ public abstract class BaseController<T extends BaseEntity<PK>, PK extends Serial
     public BaseResponse updateById(@PathVariable("id") PK id, @RequestBody T entity) {
         try {
             entity.setId(id);
-            abstractService.updateById(entity);
+            baseService.updateById(entity);
             return BaseResponse.success();
         } catch (Exception e) {
             log.error("updateById error", e);
@@ -53,10 +54,21 @@ public abstract class BaseController<T extends BaseEntity<PK>, PK extends Serial
     @DeleteMapping("{id}")
     public BaseResponse deleteById(@PathVariable("id") PK id) {
         try {
-            abstractService.deleteById(id);
+            baseService.deleteById(id);
             return BaseResponse.success();
         } catch (Exception e) {
             log.error("deleteById error", e);
+            return BaseResponse.error();
+        }
+    }
+
+    @GetMapping("list/{pageNum}/{pageSize}")
+    public BaseResponse<PageInfo<T>> getByPage(@PathVariable("pageNum") Integer pageNum, @PathVariable("pageSize") Integer pageSize) {
+        try {
+            PageInfo<T> page = baseService.getByPage(pageNum, pageSize);
+            return BaseResponse.success(page);
+        } catch (Exception e) {
+            log.error("getByPage error, pageNum = {}, pageSize = {}", pageNum, pageSize, e);
             return BaseResponse.error();
         }
     }
